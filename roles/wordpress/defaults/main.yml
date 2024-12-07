@@ -1,0 +1,3 @@
+---
+# defaults file for wordpress
+lamp_wordpress_http_host: "your_domain"

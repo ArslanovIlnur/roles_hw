@@ -1,0 +1,109 @@
+
+PLAY [all] *********************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [192.168.56.12]
+
+TASK [Install prerequisites] ***************************************************
+ok: [192.168.56.12]
+
+TASK [Install UFW] *************************************************************
+ok: [192.168.56.12]
+
+TASK [apache : Install Apache package] *****************************************
+ok: [192.168.56.12]
+
+TASK [apache : Create document root] *******************************************
+ok: [192.168.56.12]
+
+TASK [apache : Set up Apache VirtualHost] **************************************
+ok: [192.168.56.12]
+
+TASK [apache : Enable rewrite module] ******************************************
+changed: [192.168.56.12]
+
+TASK [apache : Enable new site] ************************************************
+changed: [192.168.56.12]
+
+TASK [apache : Disable default Apache site] ************************************
+changed: [192.168.56.12]
+
+TASK [apache : UFW - Allow HTTP on port 80] ************************************
+ok: [192.168.56.12]
+
+TASK [mysql : Download MySQL APT GPG key] **************************************
+ok: [192.168.56.12]
+
+TASK [mysql : Add MySQL APT GPG key] *******************************************
+ok: [192.168.56.12]
+
+TASK [mysql : Add MySQL APT repository] ****************************************
+ok: [192.168.56.12]
+
+TASK [mysql : Update apt cache] ************************************************
+ok: [192.168.56.12]
+
+TASK [mysql : Install MySQL Packages] ******************************************
+ok: [192.168.56.12] => (item=mysql-server)
+ok: [192.168.56.12] => (item=python3-pymysql)
+
+TASK [mysql : Set the root password] *******************************************
+ok: [192.168.56.12]
+
+TASK [mysql : Remove all anonymous user accounts] ******************************
+ok: [192.168.56.12]
+
+TASK [mysql : Remove the MySQL test database] **********************************
+ok: [192.168.56.12]
+
+TASK [mysql : Create database for WordPress] ***********************************
+ok: [192.168.56.12]
+
+TASK [mysql : Create MySQL user for WordPress] *********************************
+ok: [192.168.56.12]
+
+TASK [php : Install PHP Packages] **********************************************
+ok: [192.168.56.12] => (item=php)
+ok: [192.168.56.12] => (item=php-mysql)
+ok: [192.168.56.12] => (item=libapache2-mod-php)
+
+TASK [php : Install PHP Extensions] ********************************************
+ok: [192.168.56.12] => (item=php-curl)
+ok: [192.168.56.12] => (item=php-gd)
+ok: [192.168.56.12] => (item=php-mbstring)
+ok: [192.168.56.12] => (item=php-xml)
+ok: [192.168.56.12] => (item=php-xmlrpc)
+ok: [192.168.56.12] => (item=php-soap)
+ok: [192.168.56.12] => (item=php-intl)
+ok: [192.168.56.12] => (item=php-zip)
+
+TASK [wordpress : Download and unpack latest WordPress] ************************
+skipping: [192.168.56.12]
+
+TASK [wordpress : Set ownership] ***********************************************
+ok: [192.168.56.12]
+
+TASK [wordpress : Set permissions for directories] *****************************
+changed: [192.168.56.12]
+
+TASK [wordpress : Set permissions for files] ***********************************
+changed: [192.168.56.12]
+
+TASK [wordpress : Set up wp-config] ********************************************
+changed: [192.168.56.12]
+
+RUNNING HANDLER [apache : Reload Apache] ***************************************
+changed: [192.168.56.12]
+
+RUNNING HANDLER [apache : Restart Apache] **************************************
+changed: [192.168.56.12]
+
+TASK [Enable UFW] **************************************************************
+ok: [192.168.56.12]
+
+TASK [Allow OpenSSH] ***********************************************************
+ok: [192.168.56.12]
+
+PLAY RECAP *********************************************************************
+192.168.56.12              : ok=30   changed=8    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+

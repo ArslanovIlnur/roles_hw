@@ -1,0 +1,44 @@
+#########################################################
+# WordPress on Debian 12 LAMP
+#########################################################
+---
+- hosts: all
+  vars_files:
+    - vars/default.yml
+
+  pre_tasks:
+    - name: Install prerequisites
+      apt:
+        name: aptitude
+        update_cache: yes
+        state: latest
+        force_apt_get: yes
+      become: true
+      tags: [system]
+
+    - name: Install UFW
+      apt:
+        name: ufw
+        state: present
+      when: ansible_os_family == "Debian"
+
+  roles:
+    - apache
+    - mysql
+    - php
+    - wordpress
+
+  post_tasks:
+    - name: Enable UFW
+      ufw:
+        state: enabled
+      become: true
+      when: ansible_os_family == "Debian"
+
+    - name: Allow OpenSSH
+      ufw:
+        rule: allow
+        name: OpenSSH
+      become: true
+      when: ansible_os_family == "Debian"
+

@@ -1,0 +1,80 @@
+---
+# tasks file for mysql
+
+- block:
+    - name: Download MySQL APT GPG key
+      get_url:
+        url: https://repo.mysql.com/RPM-GPG-KEY-mysql
+        dest: /tmp/RPM-GPG-KEY-mysql
+      become: true
+
+    - name: Add MySQL APT GPG key
+      apt_key:
+        file: /tmp/RPM-GPG-KEY-mysql
+        state: present
+      become: true
+
+    - name: Add MySQL APT repository
+      apt_repository:
+        repo: 'deb [arch=amd64] http://repo.mysql.com/apt/debian/ bookworm mysql-8.0 main'
+        state: present
+      become: true
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+      become: true
+
+    - name: Install MySQL Packages
+      apt:
+        name: "{{ item }}"
+        state: latest
+      loop:
+        - mysql-server
+        - python3-pymysql
+      tags: [mysql]
+
+    # MySQL Configuration
+    - name: Set the root password
+      mysql_user:
+        name: root
+        password: 1234
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+      tags: [mysql, mysql-root]
+
+    - name: Remove all anonymous user accounts
+      mysql_user:
+        name: ''
+        host_all: yes
+        state: absent
+        login_user: root
+        login_password: "{{ lamp_mysql_root_password }}"
+      tags: [mysql]
+
+    - name: Remove the MySQL test database
+      mysql_db:
+        name: test
+        state: absent
+        login_user: root
+        login_password: "{{ lamp_mysql_root_password }}"
+      tags: [mysql]
+
+    - name: Create database for WordPress
+      mysql_db:
+        name: "{{ lamp_mysql_db }}"
+        state: present
+        login_user: root
+        login_password: "{{ lamp_mysql_root_password }}"
+      tags: [mysql]
+
+    - name: Create MySQL user for WordPress
+      mysql_user:
+        name: "{{ lamp_mysql_user }}"
+        password: "{{ lamp_mysql_password }}"
+        priv: "{{ lamp_mysql_db }}.*:ALL"
+        state: present
+        login_user: root
+        login_password: "{{ lamp_mysql_root_password }}"
+      tags: [mysql]
+
+  become: true
